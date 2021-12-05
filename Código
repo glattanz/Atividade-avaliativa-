@@ -1,0 +1,141 @@
+/*Atividade Avaliativa 1 - N2
+Nome: Gabrielle Lattanzi
+Professor: Sergio Netto*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+#include<time.h>
+#include <locale.h>
+
+struct familia{
+	int cod, membros, tc, b;
+	float rpp, renda;
+	char tpcidadao[30], beneficio[30], direito[30];
+};
+
+int mmsm, bolsaf, negado;
+
+void preencher(int n, familia*rel){
+	
+	for(int i=0;i<n;i++)
+	{
+		rel[i].cod = rand()% 75 + 1001;	
+		rel[i].membros = rand()% 6 + 1;
+		rel[i].tc = rand()% 4;
+		rel[i].b = rand()% 4 + 1;
+		rel[i].renda = rand()% 3550 + 450;
+		
+		if(rel[i].tc==3){
+			sprintf(rel[i].tpcidadao,"MEI");
+		}
+		if(rel[i].tc==2){
+			sprintf(rel[i].tpcidadao,"TrInf");
+		}
+		if(rel[i].tc==1){
+			sprintf(rel[i].tpcidadao,"ConPS");
+		}
+		if(rel[i].tc==0){
+			sprintf(rel[i].tpcidadao,"EFCC");
+		}
+		
+		
+		if(rel[i].b==4){
+			sprintf(rel[i].beneficio,"Nenhum\t\t");
+		}
+		if(rel[i].b==3){
+			sprintf(rel[i].beneficio,"Previdenciário\t");
+		}
+		if(rel[i].b==2){
+			sprintf(rel[i].beneficio,"Seguro Desemprego");
+		}
+		if(rel[i].b==1){
+			sprintf(rel[i].beneficio,"Bolsa família\t");
+		}
+		
+		rel[i].rpp = rel[i].renda/rel[i].membros;
+		
+		if(rel[i].renda>3135||rel[i].rpp>522.5||rel[i].b==2||rel[i].b==3){
+			
+			sprintf(rel[i].direito,"Não tem direito\t");
+			if(rel[i].b==2||rel[i].b==3){
+			
+			negado++;
+			
+		}
+			
+		}else if(rel[i].b==2||rel[i].b==1||rel[i].tc!=0||rel[i].rpp<522.5||rel[i].renda<3135){
+			
+			sprintf(rel[i].direito,"Tem direito\t");
+			if(rel[i].b==1){
+				bolsaf++;
+			}
+		}
+		else{
+			sprintf(rel[i].direito,"Outro\t");
+		}
+		
+		if(rel[i].rpp>522.5){
+			mmsm++;
+		}
+		int q4 = (mmsm*100)/75;
+		
+		int q51 = (negado*100)/75;
+		int q52 = (bolsaf*100)/75;
+	}
+}
+
+float questao4(int n, familia*rel){
+	
+	int q4 = (mmsm*100)/75;
+	
+	return(q4);
+}
+
+float questao51(int n, familia*rel){
+	
+	int q51 = (negado*100)/75;
+	
+	return(q51);
+}
+
+float questao52(int n, familia*rel){
+	
+	int q52 = (bolsaf*100)/75;;
+	
+	return(q52);
+}
+
+void imprimir(int n, familia*rel, float r4, float r51, float r52){
+	
+	printf("\nCódigo\tMembros\tTipo\tBenefício\t\tRenda\t\tRendaPP\t\tSolicitação\n");
+	
+	for(int i=0;i<n;i++)
+	{
+		printf("%d\t%d\t%s\t%s\tR$%.2f\tR$%.2f\t%s\n", rel[i].cod, rel[i].membros, rel[i].tpcidadao, rel[i].beneficio, rel[i].renda, rel[i].rpp, rel[i].direito);
+	}
+	
+	printf("\n4. Percentual de Solicitantes com renda familiar acima de meio salário mínimo por pessoa: %.2f", r4);
+	
+	printf("\n5.1. Percentual de solicitações Negadas por já estarem recebendo outros benefícios: %.2f", r51);
+	
+	printf("\n5.2. Percentual de solicitações aceitos que tem bolsa família: %.2f", r52);
+}
+
+int main(){
+	srand(time(NULL));
+	fflush(stdin);
+	setlocale(LC_ALL, "Portuguese");
+	
+	familia rel[75];
+	
+	preencher(75, rel);
+	questao4(75, rel);
+	float r4 = questao4(75, rel);
+	questao51(75, rel);
+	float r51 = questao51(75, rel);
+	questao52(75, rel);
+	float r52 = questao52(75, rel);
+	imprimir(75, rel, r4, r51, r52);
+	
+}
